@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✦ IchtoWeb // Blog ✦</title>
+    <style>
+        :root {
+            --bg-color: #120e2e;
+            --container-bg: #1a163d;
+            --border-color: #ff007f;
+            --text-color: #e0d7ff;
+            --accent-color: #00ffff;
+            --header-bg: #2d1b4e;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(var(--border-color) 0.5px, transparent 0.5px), radial-gradient(var(--border-color) 0.5px, var(--bg-color) 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--text-color);
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border: 3px double var(--border-color);
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 0px var(--border-color);
+        }
+
+        marquee {
+            background: #000;
+            color: #fff;
+            font-family: monospace;
+            padding: 3px;
+            margin-top: 10px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 12px !important;
+            margin-bottom: 15px;
+        }
+
+        .nav-links a {
+            color: var(--accent-color) !important;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff !important;
+            text-shadow: 0 0 8px var(--border-color);
+            text-decoration: none !important;
+        }
+
+        .nav-links a.active {
+            color: var(--border-color) !important;
+            text-shadow: 0 0 5px var(--border-color);
+        }
+
+        .box {
+            border: 1px solid var(--border-color);
+            background-color: rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .box-title {
+            background-color: var(--header-bg);
+            padding: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .post-date {
+            color: var(--text-color);
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .box-inner {
+            padding: 15px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.75rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 10px;
+        }
+
+        .webring {
+            margin-top: 10px;
+            padding: 5px;
+            background: #000;
+            display: inline-block;
+            border: 1px solid var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Welcome to the IchtoWeb</h1>
+        <marquee scrollamount="4">✦ Thought Logs & Game Dev Diaries // No algorithms allowed here ✦</marquee>
+    </header>
+
+    <nav class="box">
+        <div class="box-title">Navigation Deck</div>
+        <div class="box-inner nav-links">
+            <a href="index.html">[ Home ]</a>
+            <a href="blog.html" class="active">[ Blog ]</a>
+            <a href="gallery.html">[ Gallery ]</a>
+            <a href="about.html">[ About ]</a>
+        </div>
+    </nav>
+
+    <main>
+
+        <div class="box">
+            <div class="box-title">
+                <span>Entry #01: Testing out my Blog!</span>
+                <span class="post-date">May 25, 2026 @ 23:12</span>
+            </div>
+            <div class="box-inner">
+                <p>helloo? is this thing working? oh! it is! ahem.. hi!!</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Made with love, hand-coded text, and zero algorithms.</p>
+        <div class="webring">
+            <span>← IchtoWeb →</span><br>
+            <a href="#">[Prev]</a> | <a href="#">[Random]</a> | <a href="#">[Next]</a>
+        </div>
+    </footer>
+
+</div>
+
+</body>
+</html>
