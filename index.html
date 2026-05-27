@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✦ IchtoWeb ✦</title>
     <style>
-
         :root {
             --bg-color: #120e2e;
             --container-bg: #1a163d;
@@ -13,18 +12,19 @@
             --text-color: #e0d7ff;
             --accent-color: #00ffff;
             --header-bg: #2d1b4e;
+        }
 
-body {
-    background-color: var(--bg-color);
-    background-image: radial-gradient(var(--border-color) 0.5px, transparent 0.5px), radial-gradient(var(--border-color) 0.5px, var(--bg-color) 0.5px);
-    background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
-    color: var(--text-color);
-    font-family: "Courier New", Courier, monospace;
-    margin: 0;
-    padding: 0 20px 20px 20px; /* 0 on top, 20px on right, bottom, left */
-    line-height: 1.4;
-}
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(var(--border-color) 0.5px, transparent 0.5px), radial-gradient(var(--border-color) 0.5px, var(--bg-color) 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--text-color);
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.4;
+        }
 
         a {
             color: var(--accent-color);
@@ -36,14 +36,14 @@ body {
             text-shadow: 0 0 5px var(--accent-color);
         }
 
-.wrapper {
-    max-width: 800px;
-    margin: 20px auto; /* Changed from 0 auto to 20px auto to add breathing room below the top bar! */
-    background-color: var(--container-bg);
-    border: 3px double var(--border-color);
-    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.5);
-    padding: 15px;
-}
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border: 3px double var(--border-color);
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+        }
 
         header {
             background-color: var(--header-bg);
@@ -67,6 +67,34 @@ body {
             padding: 3px;
             margin-top: 10px;
             border: 1px dashed var(--border-color);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 12px !important;
+        }
+
+        .nav-links a {
+            color: var(--accent-color) !important;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff !important;
+            text-shadow: 0 0 8px var(--border-color);
+            text-decoration: none !important;
+        }
+
+        .nav-links a.active {
+            color: var(--border-color) !important;
+            text-shadow: 0 0 5px var(--border-color);
         }
 
         .main-content {
@@ -173,15 +201,6 @@ body {
     </style>
 </head>
 <body>
-    <nav class="top-bar">
-    <div class="nav-logo">IchtoWeb</div>
-    <div class="nav-links">
-        <a href="index.html" class="active">Home</a>
-        <a href="blog.html">Blog</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="about.html">About</a>
-    </div>
-</nav>
 
 <div class="wrapper">
 
@@ -189,6 +208,16 @@ body {
         <h1>Welcome to the IchtoWeb</h1>
         <marquee scrollamount="4">✦ Last updated: May 2026 ✦ Listening to: Laufey and y3llowx ✦ Game Developing late at night... ✦</marquee>
     </header>
+
+    <nav class="box">
+        <div class="box-title">Navigation Deck</div>
+        <div class="box-inner nav-links">
+            <a href="index.html" class="active">[ Home ]</a>
+            <a href="blog.html">[ Blog ]</a>
+            <a href="gallery.html">[ Gallery ]</a>
+            <a href="about.html">[ About ]</a>
+        </div>
+    </nav>
 
     <div class="main-content">
         
