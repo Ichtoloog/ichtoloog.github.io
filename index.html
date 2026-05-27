@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✦ IchtoWeb ✦</title>
+    <style>
+        :root {
+            --bg-color: #120e2e;
+            --container-bg: #1a163d;
+            --border-color: #ff007f;
+            --text-color: #e0d7ff;
+            --accent-color: #00ffff;
+            --header-bg: #2d1b4e;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(var(--border-color) 0.5px, transparent 0.5px), radial-gradient(var(--border-color) 0.5px, var(--bg-color) 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--text-color);
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border: 3px double var(--border-color);
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 0px var(--border-color);
+        }
+
+        marquee {
+            background: #000;
+            color: #fff;
+            font-family: monospace;
+            padding: 3px;
+            margin-top: 10px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 600px) {
+            .main-content {
+                grid-template-columns: 3fr 5fr;
+            }
+        }
+
+        .box {
+            border: 1px solid var(--border-color);
+            background-color: rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        .box-title {
+            background-color: var(--header-bg);
+            padding: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--accent-color);
+        }
+
+        .box-inner {
+            padding: 10px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            max-width: 150px;
+            height: 150px;
+            margin: 0 auto 10px auto;
+            border: 2px solid var(--accent-color);
+            box-sizing: border-box;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .status-mood {
+            font-size: 0.85rem;
+            border-top: 1px dashed var(--border-color);
+            margin-top: 10px;
+            padding-top: 5px;
+        }
+
+        .blink {
+            animation: blinker 1.2s linear infinite;
+            color: #ff007f;
+            font-weight: bold;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        .grid-top8 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+
+        .friend-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .friend-avatar {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #333;
+            border: 1px solid var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.75rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 10px;
+        }
+
+        .webring {
+            margin-top: 10px;
+            padding: 5px;
+            background: #000;
+            display: inline-block;
+            border: 1px solid var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <header>
+        <h1>Welcome to the IchtoWeb</h1>
+        <marquee scrollamount="4">✦ Last updated: May 2026 ✦ Listening to: Laufey and y3llowx ✦ Game Developing late at night... ✦</marquee>
+    </header>
+
+    <div class="main-content">
+        
+        <aside>
+            <div class="box">
+                <div class="box-title">The Webmaster</div>
+                <div class="box-inner" style="text-align: center;">
+                <div class="profile-pic">
+                    <img src="IchtoPFP.png" alt="My Profile Pic">
+                </div>
+                    <strong>~ Star Gazer ~</strong>
+                    
+                    <div class="status-mood" style="text-align: left;">
+                        <p><strong>Mood:</strong> ☕ Caffeinated</p>
+                        <p><strong>Status:</strong> Building silly stuff from scratch.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-title">Interests</div>
+                <div class="box-inner">
+                    <ul style="padding-left: 20px; margin: 0; font-size: 0.85rem;">
+                        <li>Game Development</li>
+                        <li>Music</li>
+                        <li>Catto Boi</li>
+                        <li>FNF</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <div class="box">
+                <div class="box-title">About Me / Manifested Thoughts</div>
+                <div class="box-inner">
+                    <p>Welcome to my little digital garden! This page is a complete rejection of modern, corporate web design. No tracking scripts, no infinite scroll, just pure HTML and CSS hosted on the same pc im using rn.</p>
+                    <p>I built this space to host my thoughts, show off my projects, and just exist peacefully on the World Wide Web.</p>
+                    <p class="blink">THIS SITE IS A **WIP**, ITS STILL MISSING A BLOG, GALLERY AND CONTACT PAGE</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>Made with love, hand-coded text, and zero algorithms.</p>
+        <div class="webring">
+            <span>← IchtoWeb →</span><br>
+            <a href="#">[Prev]</a> | <a href="#">[Random]</a> | <a href="#">[Next]</a>
+        </div>
+    </footer>
+
+</div>
+
+</body>
+</html>
