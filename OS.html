@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IchtoWeb OS</title>
+    <style>
+        /* --- RESET & RETRO BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        
+        :root {
+            --bg-color: #120c1f; /* Deep dark purple/blue */
+            --border-color: #ff007f; /* Neon pink */
+            --text-main: #e0e0e0; /* Light gray */
+            --text-accent: #00ffff; /* Cyan */
+            --text-highlight: #ff007f; /* Pink text */
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* --- DESKTOP --- */
+        .desktop {
+            width: 100%;
+            height: calc(100% - 40px);
+            position: absolute;
+            top: 40px; /* Pushed down to make room for top taskbar */
+            padding: 20px;
+            /* Faint scanline effect */
+            background: linear-gradient(rgba(18, 12, 31, 0.9), rgba(18, 12, 31, 0.9)), 
+                        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 4px);
+        }
+
+        /* --- TOP TASKBAR --- */
+        .taskbar {
+            width: 100%;
+            height: 40px;
+            background-color: var(--bg-color);
+            border-bottom: 2px solid var(--border-color);
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            z-index: 9999;
+        }
+        .taskbar-left, .taskbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .retro-button {
+            background: transparent;
+            color: var(--text-accent);
+            border: 1px solid var(--text-accent);
+            padding: 4px 12px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .retro-button:hover {
+            background: var(--text-accent);
+            color: var(--bg-color);
+        }
+        .system-time {
+            color: var(--text-highlight);
+            font-weight: bold;
+        }
+
+        /* --- START MENU (Drops down from top) --- */
+        .start-menu {
+            position: absolute;
+            top: 42px;
+            left: 10px;
+            width: 250px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 10000;
+        }
+        .start-menu.active {
+            display: flex;
+        }
+        .start-menu h4 {
+            color: var(--text-highlight);
+            text-align: center;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .start-item {
+            padding: 8px;
+            color: var(--text-accent);
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        .start-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid var(--border-color);
+        }
+
+        /* --- BOTTOM DOCK --- */
+        .dock {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(18, 12, 31, 0.85);
+            border: 2px solid var(--text-accent);
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: flex;
+            gap: 20px;
+            z-index: 9998;
+            backdrop-filter: blur(5px);
+        }
+        .dock-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: transform 0.2s, color 0.2s;
+        }
+        .dock-icon:hover {
+            transform: translateY(-5px);
+            color: var(--border-color);
+        }
+        .dock-icon span.emoji {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+        .dock-icon span.label {
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* --- WINDOWS --- */
+        .window {
+            position: absolute;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+        .window-header {
+            background-color: var(--bg-color);
+            border-bottom: 1px dashed var(--border-color);
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+        .window-title {
+            color: var(--text-accent);
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .btn-close {
+            background: transparent;
+            color: var(--border-color);
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-weight: bold;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-close:hover {
+            background: var(--border-color);
+            color: var(--bg-color);
+        }
+        .window-content {
+            padding: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* --- SPECIFIC APP STYLES --- */
+        #notes-app { width: 350px; height: 300px; top: 100px; left: 80px; }
+        #snake-app { width: 420px; height: 460px; top: 80px; left: 450px; }
+        #browser-app { width: 500px; height: 400px; top: 120px; left: 150px; }
+        #sysinfo-app { width: 300px; height: 200px; top: 150px; left: 300px; }
+        #terminal-app { width: 480px; height: 320px; top: 220px; left: 280px; }
+
+        /* Notepad */
+        textarea.notepad-text {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            color: var(--text-accent);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            padding: 10px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+        }
+
+        /* Browser */
+        .url-bar {
+            width: 100%;
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--text-accent);
+            padding: 5px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        .browser-viewport {
+            flex: 1;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        /* Snake Game Container */
+        .snake-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        canvas {
+            border: 2px solid var(--border-color);
+            background-color: #000;
+        }
+        .score-board {
+            color: var(--text-accent);
+            font-weight: bold;
+        }
+
+        /* Terminal App Inner CSS */
+        .terminal-content {
+            background-color: #000000;
+            color: var(--text-accent);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            font-family: inherit;
+        }
+        .terminal-output {
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+        }
+        .terminal-prompt {
+            color: var(--text-highlight);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-accent);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="taskbar">
+        <div class="taskbar-left">
+            <button class="retro-button" onclick="toggleStartMenu()">[ Start ]</button>
+            <a href="https://ichtoloog.github.io/index.html" class="retro-button" target="_self">[ Back to IchtoSite ]</a>
+        </div>
+        <div class="taskbar-right">
+            <div class="system-time" id="clock">00:00</div>
+        </div>
+    </div>
+
+    <div class="start-menu" id="startMenu">
+        <h4>Navigation Deck</h4>
+        <div class="start-item" onclick="openWindow('browser-app'); toggleStartMenu()">> Cyber Browser</div>
+        <div class="start-item" onclick="openWindow('notes-app'); toggleStartMenu()">> Notepad</div>
+        <div class="start-item" onclick="openWindow('snake-app'); toggleStartMenu(); initSnake()">> Play Snake</div>
+        <div class="start-item" onclick="openWindow('sysinfo-app'); toggleStartMenu()">> System Info</div>
+        <div class="start-item" onclick="openWindow('terminal-app'); toggleStartMenu()">> Cyber Terminal</div>
+    </div>
+
+    <div class="desktop" id="desktop"></div>
+
+    <div class="window hidden" id="browser-app">
+        <div class="window-header">
+            <div class="window-title">[ Net_Surfer.exe ]</div>
+            <button class="btn-close" onclick="closeWindow('browser-app')">X</button>
+        </div>
+        <div class="window-content">
+            <input type="text" class="url-bar" value="http://hyper-web.local" readonly>
+            <div class="browser-viewport">
+                <h3 style="color: var(--text-highlight); margin-bottom: 10px;">> Connection Established.</h3>
+                <p>Welcome to the isolated sub-net.</p>
+                <p style="margin-top: 10px; color: var(--text-accent);">* This is a simulated browser frame to maintain the immersive aesthetic without breaking iframe policies.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="window hidden" id="notes-app">
+        <div class="window-header">
+            <div class="window-title">[ Manifesto_Notes.txt ]</div>
+            <button class="btn-close" onclick="closeWindow('notes-app')">X</button>
+        </div>
+        <div class="window-content" style="padding: 5px;">
+            <textarea class="notepad-text" placeholder="> Enter manifested thoughts here..."></textarea>
+        </div>
+    </div>
+
+    <div class="window hidden" id="snake-app">
+        <div class="window-header">
+            <div class="window-title">[ Cyber_Snake.exe ]</div>
+            <button class="btn-close" onclick="closeWindow('snake-app')">X</button>
+        </div>
+        <div class="window-content snake-container">
+            <div class="score-board">SCORE: <span id="score">0</span></div>
+            <canvas id="gameCanvas" width="400" height="380"></canvas>
+            <p style="font-size: 12px; color: #ff007f;">Click window & use arrow keys</p>
+        </div>
+    </div>
+
+    <div class="window hidden" id="sysinfo-app">
+        <div class="window-header">
+            <div class="window-title">[ Sys_Info.dat ]</div>
+            <button class="btn-close" onclick="closeWindow('sysinfo-app')">X</button>
+        </div>
+        <div class="window-content" style="justify-content: center; align-items: center; text-align: center;">
+            <h2 style="color: var(--text-accent); margin-bottom: 15px;">IchtoOS v2.0</h2>
+            <p>Memory: 640K (Sufficient)</p>
+            <p>Processor: Hand-Coded Logic</p>
+            <p>Status: <span style="color: #27c93f;">Online</span></p>
+        </div>
+    </div>
+
+    <div class="window hidden" id="terminal-app">
+        <div class="window-header">
+            <div class="window-title">[ Cyber_Terminal.sh ]</div>
+            <button class="btn-close" onclick="closeWindow('terminal-app')">X</button>
+        </div>
+        <div class="window-content terminal-content" onclick="document.getElementById('terminalInput').focus()">
+            <div class="terminal-output" id="terminalOutput">IchtoOS Terminal Shell [Version 2.0.26]&#10;Type 'help' to review execution commands.&#10;&#10;</div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">ichto-user@os:~$</span>
+                <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <div class="dock">
+        <div class="dock-icon" onclick="openWindow('browser-app')">
+            <span class="emoji">🌐</span>
+            <span class="label">Browser</span>
+        </div>
+        <div class="dock-icon" onclick="openWindow('notes-app')">
+            <span class="emoji">📝</span>
+            <span class="label">Notes</span>
+        </div>
+        <div class="dock-icon" onclick="openWindow('snake-app'); initSnake()">
+            <span class="emoji">🐍</span>
+            <span class="label">Snake</span>
+        </div>
+        <div class="dock-icon" onclick="openWindow('sysinfo-app')">
+            <span class="emoji">💻</span>
+            <span class="label">SysInfo</span>
+        </div>
+        <div class="dock-icon" onclick="openWindow('terminal-app')">
+            <span class="emoji">📟</span>
+            <span class="label">Terminal</span>
+        </div>
+    </div>
+
+    <script>
+        /* --- 1. CORE OS LOGIC --- */
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `[ ${hours}:${minutes} ]`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function toggleStartMenu() {
+            document.getElementById('startMenu').classList.toggle('active');
+        }
+
+        // Close start menu if clicking on the desktop
+        document.getElementById('desktop').addEventListener('click', function(e) {
+            if(e.target === this) {
+                document.getElementById('startMenu').classList.remove('active');
+            }
+        });
+
+        let topZIndex = 10;
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.remove('hidden');
+            topZIndex++;
+            win.style.zIndex = topZIndex;
+            if(id === 'terminal-app') {
+                setTimeout(() => document.getElementById('terminalInput').focus(), 50);
+            }
+        }
+
+        function closeWindow(id) {
+            document.getElementById(id).classList.add('hidden');
+            if(id === 'snake-app') clearInterval(gameLoop); // Stop snake loop if window is closed
+        }
+
+        // Bring window to front on click
+        document.querySelectorAll('.window').forEach(win => {
+            win.addEventListener('mousedown', () => {
+                topZIndex++;
+                win.style.zIndex = topZIndex;
+            });
+        });
+
+        // Window Dragging Logic
+        document.querySelectorAll('.window').forEach(win => {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const header = win.querySelector('.window-header');
+            
+            header.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                if(e.target.classList.contains('btn-close')) return;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                win.style.top = (win.offsetTop - pos2) + "px";
+                win.style.left = (win.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        });
+
+        /* --- 2. TERMINAL SHELL COMMAND IMPLEMENTATION --- */
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalOutput = document.getElementById('terminalOutput');
+
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const fullCommand = terminalInput.value.trim();
+                const args = fullCommand.split(' ');
+                const command = args[0].toLowerCase();
+                
+                // Echo structural output command back to terminal feed
+                terminalOutput.innerHTML += `<span style="color: var(--text-highlight);">ichto-user@os:~$</span> ${fullCommand}\n`;
+                
+                if (command === 'help') {
+                    terminalOutput.innerHTML += `Available command configurations:\n` +
+                        `  help  - Render current interface diagnostics map.\n` +
+                        `  ls    - Audit systemic file structures inside local node.\n` +
+                        `  cat   - Output text files directly to screen standard pipeline.\n` +
+                        `  clear - Flush out terminal structural display frame logs.\n` +
+                        `  crash - Execute memory boundary breach routine.\n\n`;
+                } else if (command === 'ls') {
+                    terminalOutput.innerHTML += `Manifesto_Notes.txt    Cyber_Snake.exe    Net_Surfer.exe    Sys_Info.dat\n\n`;
+                } else if (command === 'cat') {
+                    if (args[1] && args[1].toLowerCase() === 'manifesto_notes.txt') {
+                        terminalOutput.innerHTML += `[Manifesto_Notes.txt Read-out]:\nThis digital footprint represents a clean rejection of modern corporate web bloat.\nNo tracking scripts. No algorithmic configurations.\n\n`;
+                    } else if (args[1]) {
+                        terminalOutput.innerHTML += `cat: access failure: execution privileges restricted or file ${args[1]} is non-textual.\n\n`;
+                    } else {
+                        terminalOutput.innerHTML += `Syntax error: Provide file targeting parameters (Ex: cat Manifesto_Notes.txt).\n\n`;
+                    }
+                } else if (command === 'clear') {
+                    terminalOutput.innerHTML = '';
+                } else if (command === 'crash') {
+                    terminalOutput.innerHTML += `<span style="color: #ff007f;">CRITICAL ANOMALY DISCOVERED. PREPARING CORE FLASH DISCHARGE...</span>\n`;
+                    terminalInput.disabled = true;
+                    setTimeout(() => {
+                        document.body.innerHTML = `
+                            <div style="background: #0000aa; color: #ffffff; font-family: monospace; width: 100vw; height: 100vh; padding: 50px; box-sizing: border-box; position: absolute; top:0; left:0; z-index: 9999999;">
+                                <h2>::: CRITICAL_CORE_MELTDOWN_EXCEPTION :::</h2><br>
+                                <p>A fatal overflow runtime error has occurred at memory register offset 0x00FF7F24.</p>
+                                <p>IchtoOS was paused dynamically to preserve low-level processor threads.</p><br>
+                                <p>> Action recommended: Click anywhere on this screen matrix to hot-reboot interface.</p>
+                            </div>
+                        `;
+                        const reboot = () => window.location.reload();
+                        document.addEventListener('click', reboot);
+                        document.addEventListener('keydown', reboot);
+                    }, 1200);
+                } else if (command !== '') {
+                    terminalOutput.innerHTML += `System parsing error: '${command}' matches no recognizable operational scripts. Use 'help'.\n\n`;
+                }
+                
+                terminalInput.value = '';
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+        });
+
+        /* --- 3. SNAKE GAME LOGIC --- */
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const box = 20;
+        let snake = [];
+        let food = {};
+        let score = 0;
+        let d = "";
+        let gameLoop;
+
+        function initSnake() {
+            clearInterval(gameLoop);
+            snake = [];
+            snake[0] = { x: 9 * box, y: 10 * box };
+            score = 0;
+            d = "RIGHT";
+            document.getElementById('score').innerText = score;
+            spawnFood();
+            gameLoop = setInterval(drawSnake, 100);
+        }
+
+        function spawnFood() {
+            food = {
+                x: Math.floor(Math.random() * (canvas.width / box)) * box,
+                y: Math.floor(Math.random() * (canvas.height / box)) * box
+            };
+        }
+
+        // Prevent window scrolling when using arrow keys
+        window.addEventListener("keydown", function(e) {
+            if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+
+        document.addEventListener("keydown", direction);
+        function direction(event) {
+            let key = event.keyCode;
+            if(key == 37 && d != "RIGHT") d = "LEFT";
+            else if(key == 38 && d != "DOWN") d = "UP";
+            else if(key == 39 && d != "LEFT") d = "RIGHT";
+            else if(key == 40 && d != "UP") d = "DOWN";
+        }
+
+        function collision(head, array) {
+            for(let i = 0; i < array.length; i++){
+                if(head.x == array[i].x && head.y == array[i].y) return true;
+            }
+            return false;
+        }
+
+        function drawSnake() {
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for(let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = (i == 0) ? "#00ffff" : "#00aaaa"; // Cyan snake
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeStyle = "#120c1f";
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            ctx.fillStyle = "#ff007f"; // Neon pink food
+            ctx.fillRect(food.x, food.y, box, box);
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if(d == "LEFT") snakeX -= box;
+            if(d == "UP") snakeY -= box;
+            if(d == "RIGHT") snakeX += box;
+            if(d == "DOWN") snakeY += box;
+
+            // Eat food
+            if(snakeX == food.x && snakeY == food.y) {
+                score++;
+                document.getElementById('score').innerText = score;
+                spawnFood();
+            } else {
+                snake.pop(); // Remove tail
+            }
+
+            let newHead = { x: snakeX, y: snakeY };
+
+            // Game Over conditions
+            if(snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
+                clearInterval(gameLoop);
+                ctx.fillStyle = "#ff007f";
+                ctx.font = "30px Courier New";
+                ctx.fillText("SYSTEM FAILURE", canvas.width/2 - 120, canvas.height/2);
+                return;
+            }
+
+            snake.unshift(newHead); // Add new head
+        }
+    </script>
+</body>
+</html>
